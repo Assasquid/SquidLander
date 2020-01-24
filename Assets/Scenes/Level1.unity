@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 8829366}
   - component: {fileID: 8829365}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Standard Cube Origin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,7 +312,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1813632000679824, guid: 6883331e3d333ee448be2c18429d0d5b, type: 3}
       propertyPath: m_Name
-      value: SM_Icon_Player_01
+      value: Squid Placeholder
       objectReference: {fileID: 0}
     - target: {fileID: 4513815727808732, guid: 6883331e3d333ee448be2c18429d0d5b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 8232069882043798180}
   - component: {fileID: 4318016816983934118}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Background Rock Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -819,7 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 984517852690407801}
   m_Layer: 0
-  m_Name: untitled
+  m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
