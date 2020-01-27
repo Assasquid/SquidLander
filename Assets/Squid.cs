@@ -26,12 +26,12 @@ public class Squid : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-            print("A Pressed.");
+            transform.Rotate(Vector3.forward);
         }
 
         else if (Input.GetKey(KeyCode.D))
         {
-            print("D Pressed.");
+            transform.Rotate(-Vector3.forward);
         }
     }
 }
