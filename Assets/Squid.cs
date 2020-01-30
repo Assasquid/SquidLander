@@ -24,6 +24,22 @@ public class Squid : MonoBehaviour
 
     }
 
+    void OnCollisionEnter(Collision collision) 
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Friendly":
+                // do nothing
+                print("Friendly Hug"); // todo remove this line
+                break;
+            default:
+                // kill player
+                print("Dead");
+                break;
+
+        }
+    }
+
     private void Swim()
     {
         if (Input.GetKey(KeyCode.Space))
