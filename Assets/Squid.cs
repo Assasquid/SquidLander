@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Squid : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class Squid : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource squidSwim;
 
+    enum State { Alive, Dying, Transcending }
+    State state = State.Alive;
+
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -19,25 +23,46 @@ public class Squid : MonoBehaviour
 
     void Update()
     {
-        Swim();
-        Rotate();
-
+        // todo somewhere stop sound on death
+        if (state == State.Alive)
+        {
+            Swim();
+            Rotate();
+        }
     }
 
     void OnCollisionEnter(Collision collision) 
     {
+
+        if (state != State.Alive) { return; } // ignore collisions when dead
+        
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 // do nothing
                 print("Friendly Hug"); // todo remove this line
                 break;
+            case "Finish":
+                state = State.Transcending;
+                Invoke("LoadNextLevel", 1f); // parameterise time
+                break;
             default:
-                // kill player
-                print("Dead");
+                print("Hit Something Deadly");
+                state = State.Dying;
+                Invoke("LoadFirstLevel", 1f); // parameterise time
                 break;
 
         }
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1); // todo allow for more than 2 levels
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void Swim()

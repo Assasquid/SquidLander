@@ -1136,7 +1136,7 @@ PrefabInstance:
     - target: {fileID: 5026712074324367439, guid: 3e81fecd70bba624090698db6f66c09b,
         type: 3}
       propertyPath: speedSwim
-      value: 50
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e81fecd70bba624090698db6f66c09b, type: 3}
