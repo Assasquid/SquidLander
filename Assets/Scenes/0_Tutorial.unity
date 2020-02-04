@@ -847,6 +847,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5026712074324367439, guid: 3e81fecd70bba624090698db6f66c09b,
+        type: 3}
+      propertyPath: victoryTune
+      value: 
+      objectReference: {fileID: 8300000, guid: 81b8e4bc5595191468375ae24d0d0cda, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e81fecd70bba624090698db6f66c09b, type: 3}
 --- !u!1 &1812849370

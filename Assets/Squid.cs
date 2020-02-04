@@ -8,9 +8,14 @@ public class Squid : MonoBehaviour
 {
     [SerializeField] float speedSwim = 200f;
     [SerializeField] float rcsSwim = 300f;
+    [SerializeField] AudioClip mainSwim;
+    [SerializeField] AudioClip deathSound;
+    [SerializeField] AudioClip victoryTune;
+    [SerializeField] float pitchControl = 1f;
+    [SerializeField] float volumeControl = 1f;
 
     Rigidbody rigidBody;
-    AudioSource squidSwim;
+    AudioSource audioSource;
 
     enum State { Alive, Dying, Transcending }
     State state = State.Alive;
@@ -18,7 +23,8 @@ public class Squid : MonoBehaviour
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
-        squidSwim = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
+        pitchControl = 0.25f;
     }
 
     void Update()
@@ -26,8 +32,8 @@ public class Squid : MonoBehaviour
         // todo somewhere stop sound on death
         if (state == State.Alive)
         {
-            Swim();
-            Rotate();
+            RespondToSwimInput();
+            RespondToRotateInput();
         }
     }
 
@@ -43,16 +49,32 @@ public class Squid : MonoBehaviour
                 print("Friendly Hug"); // todo remove this line
                 break;
             case "Finish":
-                state = State.Transcending;
-                Invoke("LoadNextLevel", 1f); // parameterise time
+                StartSuccessSequence();
                 break;
             default:
-                print("Hit Something Deadly");
-                state = State.Dying;
-                Invoke("LoadFirstLevel", 1f); // parameterise time
+                StartDeathSequence();
                 break;
-
         }
+    }
+
+    private void StartSuccessSequence()
+    {
+        state = State.Transcending;
+        audioSource.Stop();
+        pitchControl = 1;
+        audioSource.pitch = pitchControl;
+        audioSource.PlayOneShot(victoryTune);
+        Invoke("LoadNextLevel", 3f); // parameterise time
+    }
+
+    private void StartDeathSequence()
+    {
+        state = State.Dying;
+        audioSource.Stop();
+        pitchControl = 1;
+        audioSource.pitch = pitchControl;
+        audioSource.PlayOneShot(deathSound);
+        Invoke("LoadFirstLevel", 1f); // parameterise time
     }
 
     private void LoadNextLevel()
@@ -65,16 +87,11 @@ public class Squid : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private void Swim()
+    private void RespondToSwimInput()
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            float speedThisFrame = speedSwim * Time.deltaTime;
-            rigidBody.AddRelativeForce(Vector3.up * speedThisFrame);
-            if (!squidSwim.isPlaying) // so it doesn't layer
-            {
-                squidSwim.Play();
-            }
+            ApplySwim();
         }
         // the following is not necessary in our case, the sound is a one shot
         // maybe consider using an array of random sounds to make it sound better
@@ -84,7 +101,17 @@ public class Squid : MonoBehaviour
         }*/
     }
 
-    private void Rotate()
+    private void ApplySwim()
+    {
+        float speedThisFrame = speedSwim * Time.deltaTime;
+        rigidBody.AddRelativeForce(Vector3.up * speedThisFrame);
+        if (!audioSource.isPlaying) // so it doesn't layer
+        {
+            audioSource.PlayOneShot(mainSwim);
+        }
+    }
+
+    private void RespondToRotateInput()
     {
         rigidBody.freezeRotation = true; // take manual control of rotation
 
