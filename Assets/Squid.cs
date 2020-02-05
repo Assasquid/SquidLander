@@ -14,6 +14,13 @@ public class Squid : MonoBehaviour
     [SerializeField] float pitchControl = 1f;
     [SerializeField] float volumeControl = 1f;
 
+    [SerializeField] ParticleSystem swimParticles;
+    [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] ParticleSystem victoryParticles;
+
+
+
+
     Rigidbody rigidBody;
     AudioSource audioSource;
 
@@ -29,7 +36,6 @@ public class Squid : MonoBehaviour
 
     void Update()
     {
-        // todo somewhere stop sound on death
         if (state == State.Alive)
         {
             RespondToSwimInput();
@@ -64,6 +70,7 @@ public class Squid : MonoBehaviour
         pitchControl = 1;
         audioSource.pitch = pitchControl;
         audioSource.PlayOneShot(victoryTune);
+        victoryParticles.Play();
         Invoke("LoadNextLevel", 3f); // parameterise time
     }
 
@@ -74,6 +81,7 @@ public class Squid : MonoBehaviour
         pitchControl = 1;
         audioSource.pitch = pitchControl;
         audioSource.PlayOneShot(deathSound);
+        deathParticles.Play();
         Invoke("LoadFirstLevel", 1f); // parameterise time
     }
 
@@ -93,12 +101,15 @@ public class Squid : MonoBehaviour
         {
             ApplySwim();
         }
-        // the following is not necessary in our case, the sound is a one shot
-        // maybe consider using an array of random sounds to make it sound better
-        /*else 
+        
+        else 
         {
-            squidSwim.Stop();
-        }*/
+            // the following is not necessary in our case, the sound is a one shot
+            // maybe consider using an array of random sounds to make it sound better
+            //squidSwim.Stop();
+            swimParticles.Stop();
+        }
+        
     }
 
     private void ApplySwim()
@@ -109,6 +120,7 @@ public class Squid : MonoBehaviour
         {
             audioSource.PlayOneShot(mainSwim);
         }
+        swimParticles.Play();
     }
 
     private void RespondToRotateInput()
