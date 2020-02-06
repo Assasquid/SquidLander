@@ -8,6 +8,8 @@ public class Squid : MonoBehaviour
 {
     [SerializeField] float speedSwim = 200f;
     [SerializeField] float rcsSwim = 300f;
+    [SerializeField] float levelLoadDelay = 3f;
+
     [SerializeField] AudioClip mainSwim;
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip victoryTune;
@@ -71,7 +73,7 @@ public class Squid : MonoBehaviour
         audioSource.pitch = pitchControl;
         audioSource.PlayOneShot(victoryTune);
         victoryParticles.Play();
-        Invoke("LoadNextLevel", 3f); // parameterise time
+        Invoke("LoadNextLevel", levelLoadDelay);
     }
 
     private void StartDeathSequence()
@@ -82,7 +84,7 @@ public class Squid : MonoBehaviour
         audioSource.pitch = pitchControl;
         audioSource.PlayOneShot(deathSound);
         deathParticles.Play();
-        Invoke("LoadFirstLevel", 1f); // parameterise time
+        Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
     private void LoadNextLevel()
