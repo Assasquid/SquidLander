@@ -256,11 +256,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedSwim: 200
   rcsSwim: 300
+  levelLoadDelay: 3
   mainSwim: {fileID: 8300000, guid: d6de14df445e51744b9532dfd1864cf8, type: 3}
   deathSound: {fileID: 8300000, guid: 41f90f0e28ae20841a5e01d139b530e6, type: 3}
   victoryTune: {fileID: 8300000, guid: 81b8e4bc5595191468375ae24d0d0cda, type: 3}
   pitchControl: 1
-  volumeControl: 1
   swimParticles: {fileID: 198100717351649663}
   deathParticles: {fileID: 198204746668697806}
   victoryParticles: {fileID: 198631065552508609}
