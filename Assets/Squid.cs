@@ -12,7 +12,7 @@ public class Squid : MonoBehaviour
     [SerializeField] AudioClip deathSound;
     [SerializeField] AudioClip victoryTune;
     [SerializeField] float pitchControl = 1f;
-    [SerializeField] float volumeControl = 1f;
+    // [SerializeField] float volumeControl = 1f;
 
     [SerializeField] ParticleSystem swimParticles;
     [SerializeField] ParticleSystem deathParticles;
