@@ -43,6 +43,16 @@ public class Squid : MonoBehaviour
             RespondToSwimInput();
             RespondToRotateInput();
         }
+
+        if (Input.GetKey(KeyCode.L))
+        {
+            DebugNextLevel();
+        }
+    }
+
+    private static void DebugNextLevel()
+    {
+        SceneManager.LoadScene(1);
     }
 
     void OnCollisionEnter(Collision collision) 
