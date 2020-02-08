@@ -20,14 +20,13 @@ public class Squid : MonoBehaviour
     [SerializeField] ParticleSystem deathParticles;
     [SerializeField] ParticleSystem victoryParticles;
 
-
-
-
     Rigidbody rigidBody;
     AudioSource audioSource;
 
     enum State { Alive, Dying, Transcending }
     State state = State.Alive;
+
+    bool collisionsDisabled = false;
 
     private void Start()
     {
@@ -44,21 +43,29 @@ public class Squid : MonoBehaviour
             RespondToRotateInput();
         }
 
-        if (Input.GetKey(KeyCode.L))
+        if (Debug.isDebugBuild) // check that this work as intended
         {
-            DebugNextLevel();
+            RespondToDebugKeys();
         }
     }
 
-    private static void DebugNextLevel()
+    private void RespondToDebugKeys()
     {
-        SceneManager.LoadScene(1);
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionsDisabled = !collisionsDisabled; // toggle
+        }
     }
 
     void OnCollisionEnter(Collision collision) 
     {
 
-        if (state != State.Alive) { return; } // ignore collisions when dead
+        if (state != State.Alive || collisionsDisabled) { return; }
         
         switch (collision.gameObject.tag)
         {
@@ -137,7 +144,7 @@ public class Squid : MonoBehaviour
 
     private void RespondToRotateInput()
     {
-        rigidBody.freezeRotation = true; // take manual control of rotation
+        FreezeRotation(true);
 
         float rotationThisFrame = rcsSwim * Time.deltaTime;
 
@@ -151,6 +158,19 @@ public class Squid : MonoBehaviour
             transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
 
-        rigidBody.freezeRotation = false; // resume physics control of rotation
+        FreezeRotation(false);
+    }
+
+    private void FreezeRotation(bool isFrozen) // Freeze and unfreeze Z rotation
+    {
+        if (isFrozen)
+        {
+            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+
+        else
+        {
+            rigidBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+        }
     }
 }
