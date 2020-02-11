@@ -23,9 +23,7 @@ public class Squid : MonoBehaviour
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-    enum State { Alive, Dying, Transcending }
-    State state = State.Alive;
-
+    bool isTransitioning = false;
     bool collisionsDisabled = false;
 
     private void Start()
@@ -37,7 +35,7 @@ public class Squid : MonoBehaviour
 
     void Update()
     {
-        if (state == State.Alive)
+        if (!isTransitioning)
         {
             RespondToSwimInput();
             RespondToRotateInput();
@@ -62,19 +60,16 @@ public class Squid : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision) 
+    void OnCollisionEnter(Collision collision)
     {
 
-        if (state != State.Alive || collisionsDisabled) { return; }
-        
+        if (isTransitioning || collisionsDisabled) { return; }
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 // do nothing
                 print("Friendly Hug"); // todo remove this line
-                break;
-            case "Finish":
-                StartSuccessSequence();
                 break;
             default:
                 StartDeathSequence();
@@ -82,9 +77,21 @@ public class Squid : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider collided)
+    {
+
+        if (isTransitioning) { return; }
+
+        if (collided.tag == "Finish")
+        {
+            StartSuccessSequence();
+        }
+
+    }
+
     private void StartSuccessSequence()
     {
-        state = State.Transcending;
+        isTransitioning = true;
         audioSource.Stop();
         pitchControl = 1;
         audioSource.pitch = pitchControl;
@@ -95,7 +102,7 @@ public class Squid : MonoBehaviour
 
     private void StartDeathSequence()
     {
-        state = State.Dying;
+        isTransitioning = true;
         audioSource.Stop();
         pitchControl = 1;
         audioSource.pitch = pitchControl;
@@ -124,22 +131,37 @@ public class Squid : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            ApplySwim();
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                print("speed is reduced");
+                ApplySwim(speedSwim / 4);
+            }
+
+            else
+            { 
+                ApplySwim(speedSwim); 
+            }
+             
         }
-        
-        else 
+
+        else
         {
-            // the following is not necessary in our case, the sound is a one shot
-            // maybe consider using an array of random sounds to make it sound better
-            //squidSwim.Stop();
-            swimParticles.Stop();
+            StopApplyingThrust();
         }
-        
+
     }
 
-    private void ApplySwim()
+    private void StopApplyingThrust()
     {
-        float speedThisFrame = speedSwim * Time.deltaTime;
+        // the following is not necessary in our case, the sound is a one shot
+        // maybe consider using an array of random sounds to make it sound better
+        //squidSwim.Stop();
+        swimParticles.Stop();
+    }
+
+    private void ApplySwim(float actualSpeed)
+    {
+        float speedThisFrame = actualSpeed * Time.deltaTime;
         rigidBody.AddRelativeForce(Vector3.up * speedThisFrame);
         if (!audioSource.isPlaying) // so it doesn't layer
         {
@@ -150,20 +172,21 @@ public class Squid : MonoBehaviour
 
     private void RespondToRotateInput()
     {
-        FreezeRotation(true);
-
-        float rotationThisFrame = rcsSwim * Time.deltaTime;
-
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.forward * rotationThisFrame);
+            RotateManually(rcsSwim * Time.deltaTime);
         }
 
         else if (Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(-Vector3.forward * rotationThisFrame);
+            RotateManually(-rcsSwim * Time.deltaTime);
         }
+    }
 
+    private void RotateManually(float rotationThisFrame)
+    {
+        FreezeRotation(true);
+        transform.Rotate(Vector3.forward * rotationThisFrame);
         FreezeRotation(false);
     }
 
