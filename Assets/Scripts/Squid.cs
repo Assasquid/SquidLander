@@ -22,14 +22,18 @@ public class Squid : MonoBehaviour
 
     Rigidbody rigidBody;
     AudioSource audioSource;
+    Collider collider;
+    
 
     bool isTransitioning = false;
     bool collisionsDisabled = false;
+    Vector3 rotationCenter;
 
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+        collider = GetComponentInChildren<CapsuleCollider>();
         pitchControl = 0.25f;
     }
 
@@ -129,19 +133,18 @@ public class Squid : MonoBehaviour
 
     private void RespondToSwimInput()
     {
+        float actualSpeed = 0.0f;
+
         if (Input.GetKey(KeyCode.Space))
         {
+            actualSpeed = speedSwim;
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 print("speed is reduced");
-                ApplySwim(speedSwim / 4);
+                actualSpeed /= 4.0f;
             }
 
-            else
-            { 
-                ApplySwim(speedSwim); 
-            }
-             
+            ApplySwim(actualSpeed);     
         }
 
         else
@@ -149,6 +152,21 @@ public class Squid : MonoBehaviour
             StopApplyingThrust();
         }
 
+        ComputeRotationCenter(actualSpeed, speedSwim / 4.0f);
+
+    }
+
+    // Replace the center of rotation of the squid according to its spped.
+    // The rotation center is interpolated from the center of the bouding volume to the position (the "feet") of the avatar.
+    private void ComputeRotationCenter(float current_speed, float max_speed)
+    {
+        // interpolation_value is a value between 0.f and 1.f which represent "how far from 'center' to 'feet' we are
+        // Consider it as a percentage: 0% (0.f) is 'center' and '100%' (1.f) is "feet"
+        float interpolation_value = Mathf.Max(current_speed / max_speed, 1.0f);
+        Vector3 center = collider.bounds.center;
+        Vector3 feet = transform.position;
+        rotationCenter = Vector3.Lerp(center, feet, interpolation_value);
+        //Debug.Log(current_speed + "/" + max_speed + " (" + interpolation_value + ") : " + center + " -> " + new_center + " -> " + feet);
     }
 
     private void StopApplyingThrust()
@@ -186,7 +204,7 @@ public class Squid : MonoBehaviour
     private void RotateManually(float rotationThisFrame)
     {
         FreezeRotation(true);
-        transform.Rotate(Vector3.forward * rotationThisFrame);
+        transform.RotateAround(rotationCenter, Vector3.forward, rotationThisFrame);
         FreezeRotation(false);
     }
 
