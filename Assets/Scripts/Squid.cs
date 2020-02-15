@@ -134,12 +134,12 @@ public class Squid : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 print("speed is reduced");
-                ApplySwim(speedSwim / 4);
+                ApplySwim(speedSwim);
             }
 
             else
             { 
-                ApplySwim(speedSwim); 
+                ApplySwim(speedSwim / 4); 
             }
              
         }

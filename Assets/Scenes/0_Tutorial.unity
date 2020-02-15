@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!82 &38541905 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 911749213675096402, guid: ca574f33704c3f1458721ebe7214f104,
+    type: 3}
+  m_PrefabInstance: {fileID: 911749213892664873}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1083997213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5026712074324367433, guid: 3e81fecd70bba624090698db6f66c09b,
@@ -162,6 +168,12 @@ Light:
   m_CorrespondingSourceObject: {fileID: 3890347629020571858, guid: a73da88eed11b9145bcf430d3cf34aab,
     type: 3}
   m_PrefabInstance: {fileID: 6835772591433818789}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1365323436 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 911749213155237945, guid: ca574f33704c3f1458721ebe7214f104,
+    type: 3}
+  m_PrefabInstance: {fileID: 911749213892664873}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1550410973
 PrefabInstance:
@@ -377,10 +389,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 911749213155237945, guid: ca574f33704c3f1458721ebe7214f104,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 911749213675096402, guid: ca574f33704c3f1458721ebe7214f104,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 911749213681427316, guid: ca574f33704c3f1458721ebe7214f104,
         type: 3}
       propertyPath: m_Name
       value: General Sound Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 911749213681427318, guid: ca574f33704c3f1458721ebe7214f104,
+        type: 3}
+      propertyPath: backgroundAmbiance
+      value: 
+      objectReference: {fileID: 1365323436}
+    - target: {fileID: 911749213681427318, guid: ca574f33704c3f1458721ebe7214f104,
+        type: 3}
+      propertyPath: backgroundMusic
+      value: 
+      objectReference: {fileID: 38541905}
+    - target: {fileID: 911749213681427318, guid: ca574f33704c3f1458721ebe7214f104,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 911749213681427319, guid: ca574f33704c3f1458721ebe7214f104,
         type: 3}
